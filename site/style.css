@@ -1,0 +1,16 @@
+#canvas {
+    width: 160px;
+    height: 160px;
+    image-rendering: pixelated;
+}
+
+#base2 {
+    width: 500px;
+    height: 50px;
+    font-size: 8px;
+}
+
+#base16 {
+    width: 500px;
+    height: 50px;
+}
