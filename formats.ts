@@ -116,7 +116,46 @@ simpleBase64.addEventListener('input', function (e) {
     update(newVal)
 })
 
+function add(val: bigint) {
+    const currentVal = BigInt(base10.value)
+    const newVal = currentVal + val
+    update(newVal)
+}
+
+function multiply(multiplier: bigint) {
+    const currentVal = BigInt(base10.value)
+    const newVal = currentVal * multiplier
+    update(newVal)
+}
+
+function divide(divisor: bigint) {
+    const currentVal = BigInt(base10.value)
+    const newVal = currentVal / divisor
+    update(newVal)
+}
+
+getElement('#plus1').addEventListener('click', () => add(1n))
+getElement('#plus2').addEventListener('click', () => add(2n))
+getElement('#plus10').addEventListener('click', () => add(10n))
+getElement('#plus16').addEventListener('click', () => add(16n))
+getElement('#plus32').addEventListener('click', () => add(32n))
+getElement('#plus64').addEventListener('click', () => add(64n))
+getElement('#times2').addEventListener('click', () => multiply(2n))
+getElement('#times10').addEventListener('click', () => multiply(10n))
+getElement('#times16').addEventListener('click', () => multiply(16n))
+getElement('#times32').addEventListener('click', () => multiply(32n))
+getElement('#times64').addEventListener('click', () => multiply(64n))
+getElement('#divide2').addEventListener('click', () => divide(2n))
+getElement('#divide10').addEventListener('click', () => divide(10n))
+getElement('#divide16').addEventListener('click', () => divide(16n))
+getElement('#divide32').addEventListener('click', () => divide(32n))
+getElement('#divide64').addEventListener('click', () => divide(64n))
+
 function update(newVal: bigint) {
+    if (newVal > maxVal) {
+        alert('Value too large')
+        return
+    }
     base2.value = newVal.toString(2)
     base10.value = newVal.toString(10)
     base16.value = newVal.toString(16)
