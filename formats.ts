@@ -1,7 +1,7 @@
 import { toSimpleBase64, fromSimpleBase64 } from './simple-base64.js'
 
 const maxVal = 2n ** 256n - 1n
-
+console.log('abc 1')
 const val = new Uint8Array(32)
 
 function valAsNumber(): bigint {
@@ -29,16 +29,43 @@ const base10: HTMLInputElement = getElement('#base10')
 const base2: HTMLInputElement = getElement('#base2')
 const simpleBase64: HTMLInputElement = getElement('#simplebase64')
 
-const canvas: HTMLCanvasElement = getElement('#canvas')
-const canvasCtx = function () {
-    const maybeCtx = canvas.getContext('2d')
+const bitmap: HTMLCanvasElement = getElement('#bitmap')
+
+function paint(e: MouseEvent) {
+        const rect = bitmap.getBoundingClientRect()
+        const x = Math.floor((e.clientX - rect.left) / 10)
+        const y = Math.floor((e.clientY - rect.top) / 10)
+        const byteIdx = y * 2 + Math.floor(x / 8)
+        const currentByte = val[byteIdx]
+        let newByte
+        if (e.ctrlKey) {
+            newByte = currentByte & ~(1 << (7 - (x % 8)))
+        } else {
+            newByte = currentByte | (1 << (7 - (x % 8)))
+        }
+        if (newByte !== currentByte) {
+            val[byteIdx] = newByte
+            update()
+        }
+}
+
+bitmap.addEventListener('click', paint)
+
+bitmap.addEventListener('mousemove', (e) => {
+    if (e.buttons === 1) {
+        paint(e)
+    }
+})
+
+const bitmapCanvasCtx = function () {
+    const maybeCtx = bitmap.getContext('2d')
     if (maybeCtx === null) {
-        throw new Error('No canvas conttxt')
+        throw new Error('No canvas context')
     }
     return maybeCtx
 }()
 
-function updateCanvas() {
+function updateBitmap() {
     const imageDataBuf = new Uint8ClampedArray(1024)
     for (let row = 0; row < 16; row++) {
         let rowStr = '' + row + ' '
@@ -55,7 +82,7 @@ function updateCanvas() {
         }
     }
     const newImageData = new ImageData(imageDataBuf, 16, 16)
-    canvasCtx.putImageData(newImageData, 0, 0)
+    bitmapCanvasCtx.putImageData(newImageData, 0, 0)
 }
 
 base2.addEventListener('input', function (e) {
@@ -155,8 +182,7 @@ getElement('#divide64').addEventListener('click', () => divide(64n))
 
 function updateWithNumber(newVal: bigint) {
     if (newVal > maxVal) {
-        alert('Value too large')
-        return
+        newVal = newVal % (maxVal + 1n)
     }
     let str = newVal.toString(2)
     str = str.padStart(256, '0')
@@ -179,7 +205,7 @@ function update() {
     base10.value = newVal.toString(10)
     base16.value = newVal.toString(16)
     simpleBase64.value = toSimpleBase64(newVal)
-    updateCanvas()
+    updateBitmap()
 }
 
 // https://stackoverflow.com/a/50868276
