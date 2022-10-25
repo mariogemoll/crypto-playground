@@ -2,6 +2,7 @@
     width: 160px;
     height: 160px;
     image-rendering: pixelated;
+    border: 1px solid grey;
 }
 
 #base2, #base10, #base16, #simplebase64 {

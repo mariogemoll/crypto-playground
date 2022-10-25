@@ -2,6 +2,20 @@ import { toSimpleBase64, fromSimpleBase64 } from './simple-base64.js'
 
 const maxVal = 2n ** 256n - 1n
 
+const val = new Uint8Array(32)
+
+function valAsNumber(): bigint {
+    const uints = new Uint8Array(val)
+    const strings: string[] = []
+    for (let i = 0; i < 32; i++) {
+        const num = uints[i]
+        const str = num.toString(2)
+        const padded = str.padStart(8, '0')
+        strings.push(padded)
+    }
+    return BigInt('0b' + strings.join(''))
+}
+
 function getElement(selector) {
     const elOrNil = document.querySelector(selector)
     if (elOrNil === null) {
@@ -24,29 +38,23 @@ const canvasCtx = function () {
     return maybeCtx
 }()
 
-function updateCanvas(newVal: bigint) {
-    let str = newVal.toString(2)
-    if (str.length > 256) {
-        alert('Value too large')
-        return
-    }
-    str = str.padStart(256, '0')
-
+function updateCanvas() {
     const imageDataBuf = new Uint8ClampedArray(1024)
-
     for (let row = 0; row < 16; row++) {
-        for (let column = 0; column < 16; column++) {
-            const bit = str[16 * row + column] === "1"
-            const offset = row * 16 * 4 + column * 4
-            imageDataBuf[offset + 0] = bit ? 0 : 255 // r
-            imageDataBuf[offset + 1] = bit ? 0 : 255 // g
-            imageDataBuf[offset + 2] = bit ? 0 : 255 // b
-            imageDataBuf[offset + 3] = 255 // a
+        let rowStr = '' + row + ' '
+        for (let byteInRow = 0; byteInRow < 2; byteInRow++) {
+            rowStr += val[row * 2 + byteInRow] + ' '
+            for (let bitInByte = 0; bitInByte < 8; bitInByte++) {
+                const bit = (val[row * 2 + byteInRow] >> (7 - bitInByte)) & 1
+                const offset = (row * 16 + byteInRow * 8 + bitInByte) * 4
+                imageDataBuf[offset + 0] = bit ? 0 : 255 // r
+                imageDataBuf[offset + 1] = bit ? 0 : 255 // g
+                imageDataBuf[offset + 2] = bit ? 0 : 255 // b
+                imageDataBuf[offset + 3] = 255 // a
+            }
         }
     }
-
-    const newData = new Uint8ClampedArray(imageDataBuf)
-    const newImageData = new ImageData(newData, 16, 16)
+    const newImageData = new ImageData(imageDataBuf, 16, 16)
     canvasCtx.putImageData(newImageData, 0, 0)
 }
 
@@ -63,7 +71,7 @@ base2.addEventListener('input', function (e) {
         alert('Not binary')
         return
     }
-    update(BigInt('0b' + newValStr))
+    updateWithNumber(BigInt('0b' + newValStr))
 })
 
 base10.addEventListener('input', function (e) {
@@ -80,7 +88,7 @@ base10.addEventListener('input', function (e) {
         alert('Stay positive!')
         return
     }
-    update(BigInt(newNum))
+    updateWithNumber(BigInt(newNum))
 })
 
 base16.addEventListener('input', function (e) {
@@ -99,7 +107,7 @@ base16.addEventListener('input', function (e) {
         alert('Not hex')
         return
     }
-    update(BigInt('0x' + newValStr))
+    updateWithNumber(BigInt('0x' + newValStr))
 })
 
 simpleBase64.addEventListener('input', function (e) {
@@ -113,25 +121,19 @@ simpleBase64.addEventListener('input', function (e) {
     if (newVal > maxVal) {
         alert('Value too large')
     }
-    update(newVal)
+    updateWithNumber(newVal)
 })
 
 function add(val: bigint) {
-    const currentVal = BigInt(base10.value)
-    const newVal = currentVal + val
-    update(newVal)
+    updateWithNumber(valAsNumber() + val)
 }
 
 function multiply(multiplier: bigint) {
-    const currentVal = BigInt(base10.value)
-    const newVal = currentVal * multiplier
-    update(newVal)
+    updateWithNumber(valAsNumber() * multiplier)
 }
 
 function divide(divisor: bigint) {
-    const currentVal = BigInt(base10.value)
-    const newVal = currentVal / divisor
-    update(newVal)
+    updateWithNumber(valAsNumber() / divisor)
 }
 
 getElement('#plus1').addEventListener('click', () => add(1n))
@@ -151,16 +153,33 @@ getElement('#divide16').addEventListener('click', () => divide(16n))
 getElement('#divide32').addEventListener('click', () => divide(32n))
 getElement('#divide64').addEventListener('click', () => divide(64n))
 
-function update(newVal: bigint) {
+function updateWithNumber(newVal: bigint) {
     if (newVal > maxVal) {
         alert('Value too large')
         return
     }
+    let str = newVal.toString(2)
+    str = str.padStart(256, '0')
+    for (let i = 0; i < 32; i++) {
+        let byte = 0
+        for (let j = 0; j < 8; j++) {
+            if (str[i * 8 + j] === "1") {
+                const num = 1 << (7 - j)
+                byte |= num
+            }
+        }
+        val[i] = byte
+    }
+    update()
+}
+
+function update() {
+    const newVal = valAsNumber()
     base2.value = newVal.toString(2)
     base10.value = newVal.toString(10)
     base16.value = newVal.toString(16)
     simpleBase64.value = toSimpleBase64(newVal)
-    updateCanvas(newVal)
+    updateCanvas()
 }
 
 // https://stackoverflow.com/a/50868276
@@ -174,5 +193,5 @@ const isBinary = (maybeBinary) => /^(0|1)*$/u.test(maybeBinary)
 const isSimpleBase64 = (str: string): boolean => /^([0-9a-zA-Z]|\+|\/)*$/u.test(str)
 
 document.addEventListener('load', function () {
-    update(BigInt(0))
+    updateWithNumber(BigInt(0))
 })
