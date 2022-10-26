@@ -9,10 +9,11 @@ button {
     width: 40px
 }
 
-#base2, #base10, #base16, #simplebase64 {
+#base2, #base10, #base16, #nbase32, #nbase58, #nbase64 {
     width: 1500px;
     height: 50px;
     direction: rtl;
+    font-family: monospace;
 }
 
 #base2 {

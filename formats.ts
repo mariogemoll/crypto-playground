@@ -1,4 +1,8 @@
-import { toSimpleBase64, fromSimpleBase64 } from './simple-base64.js'
+import { positionalNumberSystem as pns, PNSFunctions } from "./positional-number-system.js"
+
+const nBase32 = pns(32n, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567')
+const nBase58 = pns(58n, '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz')
+const nBase64 = pns(64n, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/')
 
 const maxVal = 2n ** 256n - 1n
 
@@ -24,29 +28,31 @@ function getElement(selector) {
     return elOrNil
 }
 
-const base16: HTMLInputElement = getElement('#base16')
-const base10: HTMLInputElement = getElement('#base10')
-const base2: HTMLInputElement = getElement('#base2')
-const simpleBase64: HTMLInputElement = getElement('#simplebase64')
+const base16Field: HTMLInputElement = getElement('#base16')
+const base10Field: HTMLInputElement = getElement('#base10')
+const base2Field: HTMLInputElement = getElement('#base2')
+const nBase32Field: HTMLInputElement = getElement('#nbase32')
+const nBase58Field: HTMLInputElement = getElement('#nbase58')
+const nBase64Field: HTMLInputElement = getElement('#nbase64')
 
 const bitmap: HTMLCanvasElement = getElement('#bitmap')
 
 function paint(e: MouseEvent) {
-        const rect = bitmap.getBoundingClientRect()
-        const x = Math.floor((e.clientX - rect.left) / 10)
-        const y = Math.floor((e.clientY - rect.top) / 10)
-        const byteIdx = y * 2 + Math.floor(x / 8)
-        const currentByte = val[byteIdx]
-        let newByte
-        if (e.ctrlKey) {
-            newByte = currentByte & ~(1 << (7 - (x % 8)))
-        } else {
-            newByte = currentByte | (1 << (7 - (x % 8)))
-        }
-        if (newByte !== currentByte) {
-            val[byteIdx] = newByte
-            update()
-        }
+    const rect = bitmap.getBoundingClientRect()
+    const x = Math.floor((e.clientX - rect.left) / 10)
+    const y = Math.floor((e.clientY - rect.top) / 10)
+    const byteIdx = y * 2 + Math.floor(x / 8)
+    const currentByte = val[byteIdx]
+    let newByte
+    if (e.ctrlKey) {
+        newByte = currentByte & ~(1 << (7 - (x % 8)))
+    } else {
+        newByte = currentByte | (1 << (7 - (x % 8)))
+    }
+    if (newByte !== currentByte) {
+        val[byteIdx] = newByte
+        update()
+    }
 }
 
 bitmap.addEventListener('click', paint)
@@ -85,8 +91,8 @@ function updateBitmap() {
     bitmapCanvasCtx.putImageData(newImageData, 0, 0)
 }
 
-base2.addEventListener('input', function (e) {
-    let newValStr = base2.value.trim()
+base2Field.addEventListener('input', function (e) {
+    let newValStr = base2Field.value.trim()
     if (newValStr.indexOf("0b") === 0) {
         newValStr = newValStr.slice(2)
     }
@@ -101,8 +107,8 @@ base2.addEventListener('input', function (e) {
     updateWithNumber(BigInt('0b' + newValStr))
 })
 
-base10.addEventListener('input', function (e) {
-    const newNum = parseInt(base10.value)
+base10Field.addEventListener('input', function (e) {
+    const newNum = parseInt(base10Field.value)
     if (newNum === NaN) {
         alert('Not a number')
         return
@@ -118,8 +124,8 @@ base10.addEventListener('input', function (e) {
     updateWithNumber(BigInt(newNum))
 })
 
-base16.addEventListener('input', function (e) {
-    let newValStr = base16.value.trim()
+base16Field.addEventListener('input', function (e) {
+    let newValStr = base16Field.value.trim()
     if (newValStr.indexOf("0x") === 0) {
         newValStr = newValStr.slice(2)
     }
@@ -137,19 +143,27 @@ base16.addEventListener('input', function (e) {
     updateWithNumber(BigInt('0x' + newValStr))
 })
 
-simpleBase64.addEventListener('input', function (e) {
-    let newValStr = base16.value.trim()
-    // TODO verify
-    if (!isSimpleBase64(newValStr)) {
-        alert('Not (simple) base64')
-        return
-    }
-    const newVal = fromSimpleBase64(newValStr)
-    if (newVal > maxVal) {
-        alert('Value too large')
-    }
-    updateWithNumber(newVal)
-})
+function addEventListenerForNBaseField(field: HTMLInputElement, sys: PNSFunctions, label: string) {
+    field.addEventListener('input', () => {
+        let newValStr = field.value.trim()
+        if (!sys.isValid(newValStr)) {
+            alert(`Not a valid ${label} value`)
+            update()
+            return
+        }
+        const newVal = sys.decode(newValStr)
+        if (newVal > maxVal) {
+            alert('Value too large')
+            update()
+            return
+        }
+        updateWithNumber(newVal)
+    })
+}
+
+addEventListenerForNBaseField(nBase32Field, nBase32, 'nBase32')
+addEventListenerForNBaseField(nBase58Field, nBase58, 'nBase58')
+addEventListenerForNBaseField(nBase64Field, nBase64, 'nBase64')
 
 function add(val: bigint) {
     updateWithNumber(valAsNumber() + val)
@@ -218,22 +232,19 @@ function updateWithNumber(newVal: bigint) {
 
 function update() {
     const newVal = valAsNumber()
-    base2.value = newVal.toString(2)
-    base10.value = newVal.toString(10)
-    base16.value = newVal.toString(16)
-    simpleBase64.value = toSimpleBase64(newVal)
+    base2Field.value = newVal.toString(2)
+    base10Field.value = newVal.toString(10)
+    base16Field.value = newVal.toString(16)
+    nBase32Field.value = nBase32.encode(newVal)
+    nBase58Field.value = nBase58.encode(newVal)
+    nBase64Field.value = nBase64.encode(newVal)
     updateBitmap()
 }
 
 // https://stackoverflow.com/a/50868276
 const isHex = (maybeHex) =>
     maybeHex.length !== 0 && maybeHex.length % 2 === 0 && !/[^a-fA-F0-9]/u.test(maybeHex)
-const fromHexString = (hexString) =>
-    Uint8Array.from(hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)))
-const toHexString = (bytes) =>
-    bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '')
 const isBinary = (maybeBinary) => /^(0|1)*$/u.test(maybeBinary)
-const isSimpleBase64 = (str: string): boolean => /^([0-9a-zA-Z]|\+|\/)*$/u.test(str)
 
 document.addEventListener('load', function () {
     updateWithNumber(BigInt(0))
