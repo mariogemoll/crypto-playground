@@ -1,7 +1,7 @@
 import { toSimpleBase64, fromSimpleBase64 } from './simple-base64.js'
 
 const maxVal = 2n ** 256n - 1n
-console.log('abc 1')
+
 const val = new Uint8Array(32)
 
 function valAsNumber(): bigint {
