@@ -155,6 +155,10 @@ function add(val: bigint) {
     updateWithNumber(valAsNumber() + val)
 }
 
+function subtract(val: bigint) {
+    updateWithNumber(valAsNumber() - val)
+}
+
 function multiply(multiplier: bigint) {
     updateWithNumber(valAsNumber() * multiplier)
 }
@@ -163,12 +167,25 @@ function divide(divisor: bigint) {
     updateWithNumber(valAsNumber() / divisor)
 }
 
+getElement('#just0').addEventListener('click', () => updateWithNumber(0n))
+getElement('#just1').addEventListener('click', () => updateWithNumber(1n))
+getElement('#just2').addEventListener('click', () => updateWithNumber(2n))
+getElement('#just10').addEventListener('click', () => updateWithNumber(10n))
+getElement('#just16').addEventListener('click', () => updateWithNumber(16n))
+getElement('#just32').addEventListener('click', () => updateWithNumber(32n))
+getElement('#just64').addEventListener('click', () => updateWithNumber(64n))
 getElement('#plus1').addEventListener('click', () => add(1n))
 getElement('#plus2').addEventListener('click', () => add(2n))
 getElement('#plus10').addEventListener('click', () => add(10n))
 getElement('#plus16').addEventListener('click', () => add(16n))
 getElement('#plus32').addEventListener('click', () => add(32n))
 getElement('#plus64').addEventListener('click', () => add(64n))
+getElement('#minus1').addEventListener('click', () => subtract(1n))
+getElement('#minus2').addEventListener('click', () => subtract(2n))
+getElement('#minus10').addEventListener('click', () => subtract(10n))
+getElement('#minus16').addEventListener('click', () => subtract(16n))
+getElement('#minus32').addEventListener('click', () => subtract(32n))
+getElement('#minus64').addEventListener('click', () => subtract(64n))
 getElement('#times2').addEventListener('click', () => multiply(2n))
 getElement('#times10').addEventListener('click', () => multiply(10n))
 getElement('#times16').addEventListener('click', () => multiply(16n))
