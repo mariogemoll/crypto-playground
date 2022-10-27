@@ -1,5 +1,16 @@
+td {
+    vertical-align: top;
+}
+
 textarea {
     display: block;
     width: 800px;
     height: 200px;
+}
+
+#bitmap {
+    width: 320px;
+    width: 320px;
+    image-rendering: pixelated;
+    border: 1px solid grey;
 }

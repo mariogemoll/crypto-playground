@@ -37,7 +37,7 @@ inputEncodingRadioButtons.forEach(x => addEventListener('change', async e => {
         try {
             await writeInput(newEncoding)
         } catch (e) {
-            console.log(`Failed to convert input: ${e}`)
+            console.log(e)
             currentData = new ArrayBuffer(0)
             input.value = ''
             update()

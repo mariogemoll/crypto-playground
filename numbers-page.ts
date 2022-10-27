@@ -1,5 +1,6 @@
 import { positionalNumberSystem as pns, PNSFunctions } from "./positional-number-system.js"
 import { getElement } from "./util.js"
+import { makeBitmapUpdater, makePaint } from "./bitmap.js"
 
 const nBase32 = pns(32n, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567')
 const nBase58 = pns(58n, '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz')
@@ -30,23 +31,7 @@ const nBase64Field: HTMLInputElement = getElement('#nbase64')
 
 const bitmap: HTMLCanvasElement = getElement('#bitmap')
 
-function paint(e: MouseEvent) {
-    const rect = bitmap.getBoundingClientRect()
-    const x = Math.floor((e.clientX - rect.left) / 10)
-    const y = Math.floor((e.clientY - rect.top) / 10)
-    const byteIdx = y * 2 + Math.floor(x / 8)
-    const currentByte = val[byteIdx]
-    let newByte
-    if (e.ctrlKey) {
-        newByte = currentByte & ~(1 << (7 - (x % 8)))
-    } else {
-        newByte = currentByte | (1 << (7 - (x % 8)))
-    }
-    if (newByte !== currentByte) {
-        val[byteIdx] = newByte
-        update()
-    }
-}
+const paint = makePaint(val.buffer, bitmap, 10, update)
 
 bitmap.addEventListener('click', paint)
 
@@ -64,25 +49,7 @@ const bitmapCanvasCtx = function () {
     return maybeCtx
 }()
 
-function updateBitmap() {
-    const imageDataBuf = new Uint8ClampedArray(1024)
-    for (let row = 0; row < 16; row++) {
-        let rowStr = '' + row + ' '
-        for (let byteInRow = 0; byteInRow < 2; byteInRow++) {
-            rowStr += val[row * 2 + byteInRow] + ' '
-            for (let bitInByte = 0; bitInByte < 8; bitInByte++) {
-                const bit = (val[row * 2 + byteInRow] >> (7 - bitInByte)) & 1
-                const offset = (row * 16 + byteInRow * 8 + bitInByte) * 4
-                imageDataBuf[offset + 0] = bit ? 0 : 255 // r
-                imageDataBuf[offset + 1] = bit ? 0 : 255 // g
-                imageDataBuf[offset + 2] = bit ? 0 : 255 // b
-                imageDataBuf[offset + 3] = 255 // a
-            }
-        }
-    }
-    const newImageData = new ImageData(imageDataBuf, 16, 16)
-    bitmapCanvasCtx.putImageData(newImageData, 0, 0)
-}
+const updateBitmap = makeBitmapUpdater(bitmapCanvasCtx, 16, 16)
 
 base2Field.addEventListener('input', function (e) {
     let newValStr = base2Field.value.trim()
@@ -231,7 +198,7 @@ function update() {
     nBase32Field.value = nBase32.encode(newVal)
     nBase58Field.value = nBase58.encode(newVal)
     nBase64Field.value = nBase64.encode(newVal)
-    updateBitmap()
+    updateBitmap(val.buffer)
 }
 
 // https://stackoverflow.com/a/50868276

@@ -18,10 +18,11 @@ export function fromBin(str: string): ArrayBuffer {
     return bytes
 }
 
-export function toBin(bytes: ArrayBuffer): string {
+export function toBin(bytes: ArrayBuffer, len?: number): string {
     const uints = new Uint8Array(bytes)
     let str = ''
-    for (let byteIdx = 0; byteIdx < uints.length; byteIdx++) {
+    const max = len === undefined ? uints.length : Math.min(len, uints.length)
+    for (let byteIdx = 0; byteIdx < max; byteIdx++) {
         const byte = uints[byteIdx]
         for (let bitIdx = 0; bitIdx < 8; bitIdx++) {
             if (byte & (1 << (7 - bitIdx))) {
@@ -63,10 +64,11 @@ export function fromDec(str: string): ArrayBuffer {
     return bytes
 }
 
-export function toDec(buf: ArrayBuffer): string {
+export function toDec(buf: ArrayBuffer, len?: number): string {
     const uints = new Uint8Array(buf)
     const bytesInDec: string[] = []
-    for (let i = 0; i < uints.length; i++) {
+    const max = len === undefined ? uints.length : Math.min(len, uints.length)
+    for (let i = 0; i < max; i++) {
         bytesInDec[i] = uints[i].toString(10)
     }
     return bytesInDec.join(',')
@@ -74,7 +76,7 @@ export function toDec(buf: ArrayBuffer): string {
 
 export function fromHex(str: string): ArrayBuffer {
     if (str.length % 2 !== 0) {
-        throw new Error(`Invalid hex string length ${str.length}`)
+        str += '0'
     }
     const bytes = new ArrayBuffer(str.length / 2)
     const uints = new Uint8Array(bytes)
@@ -89,10 +91,11 @@ export function fromHex(str: string): ArrayBuffer {
     return bytes
 }
 
-export function toHex(buf: ArrayBuffer): string {
+export function toHex(buf: ArrayBuffer, len?: number): string {
     const uints = new Uint8Array(buf)
     const bytesInHex: string[] = []
-    for (let i = 0; i < uints.length; i++) {
+    const max = len === undefined ? uints.length : Math.min(len, uints.length)
+    for (let i = 0; i < max; i++) {
         bytesInHex[i] = uints[i].toString(16).padStart(2, '0')
     }
     return bytesInHex.join('')
@@ -110,10 +113,11 @@ export async function fromBase64(str: string): Promise<ArrayBuffer> {
     }
 }
 
-export function toBase64(buf: ArrayBuffer): Promise<string> {
+export function toBase64(buf: ArrayBuffer, len?: number): Promise<string> {
+    const source = len === undefined? buf : buf.slice(0, len)
     return new Promise((resolve, reject) => {
 
-        const blob = new Blob([buf], { type: 'application/octet-stream' })
+        const blob = new Blob([source], { type: 'application/octet-stream' })
 
         var reader = new FileReader()
         reader.onload = function (event) {
@@ -147,10 +151,11 @@ export function fromAscii(str: string): ArrayBuffer {
     return buf
 }
 
-export function toAscii(buf: ArrayBuffer): string {
+export function toAscii(buf: ArrayBuffer, len?: number): string {
     const uints = new Uint8Array(buf)
     const result: string[] = []
-    for (let i = 0; i < uints.length; i++) {
+    const max = len === undefined ? uints.length : Math.min(len, uints.length)
+    for (let i = 0; i < max; i++) {
         const byte = uints[i]
         if (byte > 127) {
             throw new Error(`Invalid ASCII value ${byte}`)

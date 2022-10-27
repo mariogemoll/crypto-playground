@@ -8,11 +8,25 @@
 
 <body>
     <h1>Bytes</h1>
-    <textarea id="bin"></textarea>
-    <textarea id="dec"></textarea>
-    <textarea id="hex"></textarea>
-    <textarea id="base64"></textarea>
-    <textarea id="ascii"></textarea>
+    <table>
+        <tr>
+            <td>
+                <h2>Binary</h2>
+                <textarea id="bin"></textarea>
+                <h2>Decimal(comma-separated)</h2>
+                <textarea id="dec"></textarea>
+                <h2>Hex</h2>
+                <textarea id="hex"></textarea>
+                <h2>Base64</h2>
+                <textarea id="base64"></textarea>
+                <h2>ASCII</h2>
+                <textarea id="ascii"></textarea>
+            </td>
+            <td>
+                <canvas width="64" height="64" id="bitmap"></canvas>
+            </td>
+        </tr>
+    </table>
     <script src="bytes-page.js" type="module"></script>
 </body>
 
