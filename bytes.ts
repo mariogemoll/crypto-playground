@@ -79,7 +79,7 @@ export function toBase64(buf: ArrayBuffer): Promise<string> {
 
         const blob = new Blob([buf], { type: 'application/octet-stream' })
 
-        var reader = new FileReader();
+        var reader = new FileReader()
         reader.onload = function (event) {
             if (event === null) {
                 reject(new Error('No event'))

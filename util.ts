@@ -7,7 +7,7 @@ export function getElement(selector) {
 }
 
 export function getRadioButtons(name: string): NodeListOf<HTMLInputElement> {
-  return document.querySelectorAll(`input[type="radio"][name="${name}"]`)
+    return document.querySelectorAll(`input[type="radio"][name="${name}"]`)
 }
 
 export function getRadioButtonValue(radioButtons: NodeListOf<HTMLInputElement>): string {
