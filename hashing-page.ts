@@ -3,11 +3,13 @@ import { fromDec, toDec, fromHex, toHex, fromBase64, toBase64, fromAscii, toAsci
 
 type InputEncoding = 'dec' | 'hex' | 'base64' | 'ascii'
 type OutputEncoding = 'dec' | 'hex' | 'base64'
+type HashingAlgorithm = 'SHA-1' | 'SHA-256' | 'SHA-384' | 'SHA-512'
 
 const input = getElement('textarea#input')
 const output = getElement('textarea#output')
 const inputEncodingRadioButtons = getRadioButtons('inputencoding')
 const outputEncodingRadioButtons = getRadioButtons('outputencoding')
+const algorithmRadioButtons = getRadioButtons('algorithm')
 
 let currentData = new ArrayBuffer(0)
 let currentInputEncoding = getInputEncoding()
@@ -26,6 +28,7 @@ input.addEventListener('input', async function () {
     update()
 })
 
+algorithmRadioButtons.forEach(x => x.addEventListener('change', update))
 outputEncodingRadioButtons.forEach(x => x.addEventListener('change', update))
 
 inputEncodingRadioButtons.forEach(x => addEventListener('change', async e => {
@@ -49,6 +52,14 @@ function getInputEncoding(): InputEncoding {
         return val
     }
     throw new Error(`Invalid input encoding ${val}`)
+}
+
+function getAlgorithm(): HashingAlgorithm {
+    const val = getRadioButtonValue(algorithmRadioButtons)
+    if (val === 'SHA-1' || val === 'SHA-256' || val === 'SHA-384' || val === 'SHA-512') {
+        return val
+    }
+    throw new Error(`Invalid hashing algorithm ${val}`)
 }
 
 function getOutputEncoding(): OutputEncoding {
@@ -98,7 +109,7 @@ async function update() {
         output.value = ''
     }
     try {
-        const hash = await crypto.subtle.digest('SHA-256', currentData)
+        const hash = await crypto.subtle.digest(getAlgorithm(), currentData)
         const outputEncoding = getOutputEncoding()
         switch (getOutputEncoding()) {
             case 'dec':
