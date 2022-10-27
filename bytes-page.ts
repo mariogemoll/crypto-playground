@@ -11,7 +11,6 @@ const base64 = getElement('textarea#base64')
 const ascii = getElement('textarea#ascii')
 
 const bitmap: HTMLCanvasElement = getElement('#bitmap')
-const bitmapCanvasCtx = bitmap.getContext('2d')!
 
 let data = new ArrayBuffer(2048)
 let dataLength = 0
@@ -79,7 +78,7 @@ async function update(omit?: string) {
     updateBitmap(data)
 }
 
-const updateBitmap = makeBitmapUpdater(bitmapCanvasCtx, 64, 64)
+const updateBitmap = makeBitmapUpdater(bitmap)
 const paint = makePaint(data, bitmap, 5, update)
 
 function setDataLengthAndPaint(e) {

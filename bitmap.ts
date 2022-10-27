@@ -1,14 +1,18 @@
-export function makeBitmapUpdater(ctx: CanvasRenderingContext2D, width, height) {
-    if (width % 8 !== 0) {
+export function makeBitmapUpdater(bitmap: HTMLCanvasElement) {
+    if (bitmap.width % 8 !== 0) {
         throw new Error('width must be a multiple of 8')
     }
+    const bytesPerRow = bitmap.width / 8
 
-    const bytesPerRow = width / 8
+    const ctx = bitmap.getContext('2d')
+    if (ctx === null) {
+        throw new Error('No canvas context')
+    }
 
     return function updateBitmap(data: ArrayBuffer) {
         const uints = new Uint8Array(data)
-        const imageDataBuf = new Uint8ClampedArray(width * height * 4)
-        for (let row = 0; row < height; row++) {
+        const imageDataBuf = new Uint8ClampedArray(bitmap.width * bitmap.height * 4)
+        for (let row = 0; row < bitmap.height; row++) {
             for (let byteInRow = 0; byteInRow < bytesPerRow; byteInRow++) {
                 const byteIdx = row * bytesPerRow + byteInRow
                 let byte = uints[byteIdx]
@@ -17,7 +21,7 @@ export function makeBitmapUpdater(ctx: CanvasRenderingContext2D, width, height) 
                 }
                 for (let bitInByte = 0; bitInByte < 8; bitInByte++) {
                     const bit = (byte >> (7 - bitInByte)) & 1
-                    const offset = (row * width + byteInRow * 8 + bitInByte) * 4
+                    const offset = (row * bitmap.width + byteInRow * 8 + bitInByte) * 4
                     imageDataBuf[offset + 0] = bit ? 0 : 255 // r
                     imageDataBuf[offset + 1] = bit ? 0 : 255 // g
                     imageDataBuf[offset + 2] = bit ? 0 : 255 // b
@@ -25,7 +29,7 @@ export function makeBitmapUpdater(ctx: CanvasRenderingContext2D, width, height) 
                 }
             }
         }
-        const newImageData = new ImageData(imageDataBuf, width, height)
+        const newImageData = new ImageData(imageDataBuf, bitmap.width, bitmap.height)
         ctx.putImageData(newImageData, 0, 0)
     }
 }

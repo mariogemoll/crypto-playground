@@ -41,15 +41,7 @@ bitmap.addEventListener('mousemove', (e) => {
     }
 })
 
-const bitmapCanvasCtx = function () {
-    const maybeCtx = bitmap.getContext('2d')
-    if (maybeCtx === null) {
-        throw new Error('No canvas context')
-    }
-    return maybeCtx
-}()
-
-const updateBitmap = makeBitmapUpdater(bitmapCanvasCtx, 16, 16)
+const updateBitmap = makeBitmapUpdater(bitmap)
 
 base2Field.addEventListener('input', function (e) {
     let newValStr = base2Field.value.trim()

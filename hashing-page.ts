@@ -1,5 +1,6 @@
 import { getElement, getRadioButtons, getRadioButtonValue } from './util.js'
 import { fromDec, toDec, fromHex, toHex, fromBase64, toBase64, fromAscii, toAscii } from './bytes.js'
+import { makeBitmapUpdater } from './bitmap.js'
 
 type InputEncoding = 'dec' | 'hex' | 'base64' | 'ascii'
 type OutputEncoding = 'dec' | 'hex' | 'base64'
@@ -10,6 +11,11 @@ const output = getElement('textarea#output')
 const inputEncodingRadioButtons = getRadioButtons('inputencoding')
 const outputEncodingRadioButtons = getRadioButtons('outputencoding')
 const algorithmRadioButtons = getRadioButtons('algorithm')
+
+const sha1Bitmap: HTMLCanvasElement = getElement('#sha1bitmap')
+const sha256Bitmap: HTMLCanvasElement = getElement('#sha256bitmap')
+const sha384Bitmap: HTMLCanvasElement = getElement('#sha384bitmap')
+const sha512Bitmap: HTMLCanvasElement = getElement('#sha512bitmap')
 
 let currentData = new ArrayBuffer(0)
 let currentInputEncoding = getInputEncoding()
@@ -124,8 +130,37 @@ async function update() {
             default:
                 throw new Error(`Unknown output encoding ${outputEncoding}`)
         }
+        for (const canvas of [sha1Bitmap, sha256Bitmap, sha384Bitmap, sha512Bitmap]) {
+            canvas.style.display = 'none'
+        }
+
+        switch (getAlgorithm()) {
+            case 'SHA-1':
+                updateSha1Bitmap(hash)
+                sha1Bitmap.style.display = 'block'
+                break
+            case 'SHA-256':
+                updateSha256Bitmap(hash)
+                sha256Bitmap.style.display = 'block'
+                break
+            case 'SHA-384':
+                updateSha384Bitmap(hash)
+                sha384Bitmap.style.display = 'block'
+                break
+            case 'SHA-512':
+                updateSha512Bitmap(hash)
+                sha512Bitmap.style.display = 'block'
+                break
+            default:
+                throw new Error(`Unknown hashing algorithm ${getAlgorithm()}`)
+        }
     } catch (e) {
         alert(e)
         return
     }
 }
+
+const updateSha1Bitmap = makeBitmapUpdater(sha1Bitmap)
+const updateSha256Bitmap = makeBitmapUpdater(sha256Bitmap)
+const updateSha384Bitmap = makeBitmapUpdater(sha384Bitmap)
+const updateSha512Bitmap = makeBitmapUpdater(sha512Bitmap)

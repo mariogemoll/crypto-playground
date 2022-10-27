@@ -41,7 +41,14 @@
             </td>
         </tr>
         <tr>
-            <td><textarea id="output" readonly></textarea></td>
+            <td>
+                <textarea id="output" readonly></textarea>
+                <br />
+                <canvas id="sha1bitmap" width="16" height="10"></canvas>
+                <canvas id="sha256bitmap" width="16" height="16"></canvas>
+                <canvas id="sha384bitmap" width="24" height="16"></canvas>
+                <canvas id="sha512bitmap" width="32" height="16"></canvas>
+            </td>
             <td>
                 <input type="radio" id="outputencodingdec" name="outputencoding" value="dec" />
                 <label for="outputencodingdec">Dec</label>
