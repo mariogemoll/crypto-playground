@@ -1,3 +1,39 @@
+export function fromBin(str: string): ArrayBuffer {
+    const bytes = new ArrayBuffer(Math.ceil(str.length / 8))
+    const uints = new Uint8Array(bytes)
+    for (let byteIdx = 0; byteIdx < uints.length; byteIdx++) {
+        let byte = 0
+        for (let bitIdx = 0; bitIdx < 8 && byteIdx * 8 + bitIdx < str.length; bitIdx++) {
+            const letter = str[byteIdx * 8 + bitIdx]
+            if (letter === '0') {
+                // ignore
+            } else if (letter === '1') {
+                byte |= 1 << (7 - bitIdx)
+            } else {
+                throw new Error(`Invalid character ${letter} in binary string`)
+            }
+        }
+        uints[byteIdx] = byte
+    }
+    return bytes
+}
+
+export function toBin(bytes: ArrayBuffer): string {
+    const uints = new Uint8Array(bytes)
+    let str = ''
+    for (let byteIdx = 0; byteIdx < uints.length; byteIdx++) {
+        const byte = uints[byteIdx]
+        for (let bitIdx = 0; bitIdx < 8; bitIdx++) {
+            if (byte & (1 << (7 - bitIdx))) {
+                str += '1'
+            } else {
+                str += '0'
+            }
+        }
+    }
+    return str
+}
+
 const decRegex = /^[\d,]*/
 
 export function fromDec(str: string): ArrayBuffer {
