@@ -1,4 +1,5 @@
 import { positionalNumberSystem as pns, PNSFunctions } from "./positional-number-system.js"
+import { getElement } from "./util.js"
 
 const nBase32 = pns(32n, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567')
 const nBase58 = pns(58n, '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz')
@@ -18,14 +19,6 @@ function valAsNumber(): bigint {
         strings.push(padded)
     }
     return BigInt('0b' + strings.join(''))
-}
-
-function getElement(selector) {
-    const elOrNil = document.querySelector(selector)
-    if (elOrNil === null) {
-        throw new Error(`No element found for selector ${selector}`)
-    }
-    return elOrNil
 }
 
 const base16Field: HTMLInputElement = getElement('#base16')
