@@ -17,8 +17,8 @@ button {
 #nbase64 {
     width: 1500px;
     height: 50px;
-    direction: rtl;
     font-family: monospace;
+    text-align: right;
 }
 
 #base2 {
