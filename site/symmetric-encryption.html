@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Symmetric encryption</title>
+    <link rel="stylesheet" href="symmetric-encryption.css">
+</head>
+
+<body>
+    <h1>Symmetric encryption</h1>
+    <table>
+        <tr>
+            <td colspan="2">Algorithm: AES-GCM</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Key</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="key"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="keyencodingdec" name="keyencoding" value="dec" />
+                <label for="keyencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="keyencodinghex" name="keyencoding" value="hex" />
+                <label for="keyencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="keyencodingbase64" name="keyencoding" value="base64" checked />
+                <label for="keyencodingbase64">Base64</label>
+                <br />
+                <button id="buttongeneratekey">Generate</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Plaintext</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="plaintext"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="plaintextencodingdec" name="plaintextencoding" value="dec" />
+                <label for="plaintextencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="plaintextencodinghex" name="plaintextencoding" value="hex" />
+                <label for="plaintextencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="plaintextencodingbase64" name="plaintextencoding" value="base64" />
+                <label for="plaintextencodingbase64">Base64</label>
+                <br />
+                <input type="radio" id="plaintextencodingascii" name="plaintextencoding" value="ascii" checked />
+                <label for="plaintextencodingascii">ASCII</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Ciphertext</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="ciphertext"></textarea>
+                <br />
+                <canvas id="sha1bitmap" width="16" height="10"></canvas>
+                <canvas id="sha256bitmap" width="16" height="16"></canvas>
+                <canvas id="sha384bitmap" width="24" height="16"></canvas>
+                <canvas id="sha512bitmap" width="32" height="16"></canvas>
+            </td>
+            <td>
+                <input type="radio" id="ciphertextencodingdec" name="ciphertextencoding" value="dec" />
+                <label for="ciphertextencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="ciphertextencodinghex" name="ciphertextencoding" value="hex" />
+                <label for="ciphertextencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="ciphertextencodingbase64" name="ciphertextencoding" value="base64" checked />
+                <label for="ciphertextencodingbase64">Base64</label>
+            </td>
+        </tr>
+    </table>
+    <script src="symmetric-encryption-page.js" type="module"></script>
+</body>
+
+</html>
