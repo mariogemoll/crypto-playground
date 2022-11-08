@@ -48,7 +48,7 @@ export function makePaint(
         const byteIdx = y * bytesPerRow + Math.floor(x / 8)
         const currentByte = uints[byteIdx]
         let newByte
-        if (e.ctrlKey) {
+        if (e.ctrlKey || e.altKey) {
             newByte = currentByte & ~(1 << (7 - (x % 8)))
         } else {
             newByte = currentByte | (1 << (7 - (x % 8)))
