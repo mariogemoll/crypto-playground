@@ -1,3 +1,7 @@
+h1, td {
+    font-family: "San Francisco" sans-serif;
+}
+
 #input, #output {
     background-color: #f0f0f0;
     border: 1px solid #ccc;
