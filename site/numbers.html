@@ -4,6 +4,7 @@
 <head>
     <title>Numbers</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="numbers.css">
 </head>
 
 <body>
@@ -55,36 +56,20 @@
             <td><button id="divide64">&divide;64</button></td>
         </tr>
     </table>
-    <table>
-        <tr>
-            <td>Base2 (binary)</td>
-            <td><textarea id="base2" maxlength="256" ></textarea></td>
-        </tr>
-        <tr>
-            <td>Base10 (decimal)</td>
-            <td><input id="base10" type="text" /></td>
-        </tr>
-        <tr>
-            <td>Base16 (hex)</td>
-            <td><input id="base16" type="text" maxlength="64" /></td>
-        </tr>
-        <tr>
-            <td>nBase32</td>
-            <td><input id="nbase32" type="text" /></td>
-        </tr>
-        <tr>
-            <td>nBase58</td>
-            <td><input id="nbase58" type="text" /></td>
-        </tr>
-        <tr>
-            <td>nBase64</td>
-            <td><input id="nbase64" type="text" /></td>
-        </tr>
-        <tr>
-            <td>Bitmap</td>
-            <td>
-                <canvas width="16" height="16" id="bitmap"></canvas>
-            </td>
+            <h2>Base2 (binary)</h2>
+            <td><textarea id="base2" maxlength="256" ></textarea>
+            <h2>Base10 (decimal)</h2>
+            <td><input id="base10" type="text" />
+            <h2>Base16 (hex)</h2>
+            <td><input id="base16" type="text" maxlength="64" />
+            <h2>nBase32</h2>
+            <td><input id="nbase32" type="text" />
+            <h2>nBase58</h2>
+            <td><input id="nbase58" type="text" />
+            <h2>nBase64</h2>
+            <td><input id="nbase64" type="text" />
+            <h2>Bitmap</h2>
+            <canvas width="16" height="16" id="bitmap"></canvas>
         </tr>
     </table>
     <script src="numbers-page.js" type="module"></script>

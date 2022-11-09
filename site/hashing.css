@@ -1,23 +1,6 @@
-h1, td {
-    font-family: "San Francisco" sans-serif;
+canvas {
+    margin-top: 20px;
 }
-
-#input, #output {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px;
-    width: 500px;
-}
-
-#sha1bitmap,
-#sha256bitmap,
-#sha384bitmap,
-#sha512bitmap {
-    image-rendering: pixelated;
-    border: 1px solid grey;
-}
-
 #sha1bitmap {
     width: 160px;
     height: 100px;
@@ -39,4 +22,8 @@ h1, td {
     width: 320px;
     height: 160px;
     display: none;
+}
+
+#output {
+    height: 50px;
 }

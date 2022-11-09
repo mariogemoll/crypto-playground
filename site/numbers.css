@@ -1,0 +1,22 @@
+#bitmap {
+    width: 160px;
+    height: 160px;
+}
+
+button {
+    width: 40px
+}
+
+#base2,
+#base10,
+#base16,
+#nbase32,
+#nbase58,
+#nbase64 {
+    width: 900px;
+    text-align: right;
+}
+
+#base2 {
+    height: 50px;
+}

@@ -1,30 +1,47 @@
-h1, td{
-    font-family: "San Francisco", sans-serif;
+@font-face {
+  font-family: epilogue;
+  src: url(Epilogue-VariableFont_wght.ttf);
 }
 
-#bitmap {
-    width: 160px;
-    height: 160px;
+body {
+    padding: 10px;
+}
+
+h1, h2, p, td, input, button {
+    font-family: epilogue;
+}
+
+h1 {
+    padding: 0;
+    margin: 20px 0px;
+}
+
+h2 {
+    font-size: 16px;
+    line-height: 24px;
+    padding: 0;
+    margin: 10px 0 0 0;
+}
+
+td {
+    vertical-align: top;
+    padding: 0
+}
+
+textarea {
+    width: 450px;
+    height: 100px;
+}
+
+textarea, input[type=text], canvas {
+    border: 1px solid #ccc;
+}
+
+textarea, input[type=text] {
+    font-family: monospace;
+    padding: 5px;
+}
+
+canvas {
     image-rendering: pixelated;
-    border: 1px solid grey;
-}
-
-button {
-    width: 40px
-}
-
-#base2,
-#base10,
-#base16,
-#nbase32,
-#nbase58,
-#nbase64 {
-    width: 900px;
-    height: 50px;
-    font-family: "SF Mono", monospace;
-    text-align: right;
-}
-
-#base2 {
-    font-size: 8px;
 }
