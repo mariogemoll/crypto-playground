@@ -7,8 +7,21 @@ body {
     padding: 10px;
 }
 
-h1, h2, p, td, input, button {
+body, h1, h2, p, td, input, button {
     font-family: epilogue;
+}
+
+body {
+    font-weight: 400;
+}
+
+h1, h2 {
+    font-weight: 600;
+}
+
+a {
+    color: #000;
+    text-decoration: underline;
 }
 
 h1 {
