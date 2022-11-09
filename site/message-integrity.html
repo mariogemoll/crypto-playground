@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Message integrity</title>
+    <link rel="stylesheet" href="message-integrity.css">
+</head>
+
+<body>
+    <h1>Message integrity</h1>
+    <table>
+        <tr>
+            <td colspan="2">Algorithm: HMAC-SHA512</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Key</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="key"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="keyencodingdec" name="keyencoding" value="dec" />
+                <label for="keyencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="keyencodinghex" name="keyencoding" value="hex" />
+                <label for="keyencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="keyencodingbase64" name="keyencoding" value="base64" checked />
+                <label for="keyencodingbase64">Base64</label>
+                <br />
+                <button id="buttongeneratekey">Generate</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Message</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="message"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="messageencodingdec" name="messageencoding" value="dec" />
+                <label for="messageencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="messageencodinghex" name="messageencoding" value="hex" />
+                <label for="messageencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="messageencodingbase64" name="messageencoding" value="base64" />
+                <label for="messageencodingbase64">Base64</label>
+                <br />
+                <input type="radio" id="messageencodingascii" name="messageencoding" value="ascii" checked />
+                <label for="messageencodingascii">ASCII</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button id="sign">Sign</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Tag</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="tag"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="tagencodingdec" name="tagencoding" value="dec" />
+                <label for="tagencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="tagencodinghex" name="tagencoding" value="hex" />
+                <label for="tagencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="tagencodingbase64" name="tagencoding" value="base64" checked />
+                <label for="tagencodingbase64">Base64</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button id="verify">Verify</button>
+                <br/>
+                <p id="verificationresult"></p>
+            </td>
+        </tr>
+    </table>
+    <script src="message-integrity-page.js" type="module"></script>
+</body>
+
+</html>
