@@ -1,7 +1,11 @@
 import {
-    getElement, getRadioButtons, DataEncoding, MaybeTextEncoding, getData,
-    getMaybeTextData, getDataEncoding, getMaybeTextEncoding, writeData, writeMaybeTextData
+    getElement, getRadioButtons, DataEncoding, MaybeTextEncoding, getData, getMaybeTextData,
+    getDataEncoding, getMaybeTextEncoding, writeData, writeMaybeTextData
 } from './util.js'
+import { makeBitmapUpdater, makePaint } from './bitmap.js'
+import {
+    fromDec, toDec, fromHex, toHex, fromBase64, toBase64, fromAscii, toAscii
+} from './bytes.js'
 
 const messageEncodingRadioButtons = getRadioButtons('messageencoding')
 const tagEncodingRadioButtons = getRadioButtons('tagencoding')
@@ -19,6 +23,68 @@ const keyEncodingRadioButtons = getRadioButtons('keyencoding')
 const getKeyEncoding = getDataEncoding.bind(null, 'key', keyEncodingRadioButtons)
 const getMessageEncoding = getMaybeTextEncoding.bind(null, 'message', messageEncodingRadioButtons)
 const getTagEncoding = getDataEncoding.bind(null, 'tag', tagEncodingRadioButtons)
+
+let data = new ArrayBuffer(2048)
+let dataLength = 0
+
+const bitmap: HTMLCanvasElement = getElement('#bitmap')
+const updateBitmap = makeBitmapUpdater(bitmap)
+const paint = makePaint(data, bitmap, 5, updateMessage)
+
+function setDataLengthAndPaint(e) {
+    updateDataLength(512)
+    paint(e)
+}
+
+function updateDataLength(newLength: number) {
+    if (newLength != dataLength) {
+        const uints = new Uint8Array(data)
+        dataLength = newLength
+        for (let i = newLength; i < data.byteLength; i++) {
+            uints[i] = 0
+        }
+    }
+}
+
+messageField.addEventListener('input', async function () {
+    try {
+        let newData
+        switch (currentMessageEncoding) {
+            case 'dec':
+                newData = fromDec(messageField.value)
+                break
+            case 'hex':
+                newData = fromHex(messageField.value)
+                break
+            case 'base64':
+                newData = await fromBase64(messageField.value)
+                break
+            case 'ascii':
+                newData = fromAscii(messageField.value)
+                break
+            default:
+                throw new Error(`Invalid message encoding ${currentMessageEncoding}`)
+        }
+        const dataUints = new Uint8Array(data)
+        dataUints.set(new Uint8Array(newData))
+        for (let i = newData.byteLength; i < data.byteLength; i++) {
+            dataUints[i] = 0
+        }
+        updateDataLength(newData.byteLength)
+        updateBitmap(data)
+    } catch (e) {
+        alert(e)
+    }
+}
+)
+
+bitmap.addEventListener('click', setDataLengthAndPaint)
+
+bitmap.addEventListener('mousemove', (e) => {
+    if (e.buttons === 1) {
+        setDataLengthAndPaint(e)
+    }
+})
 
 async function generateKey() {
     const key = await window.crypto.subtle.generateKey(
@@ -69,7 +135,7 @@ messageEncodingRadioButtons.forEach(x => x.addEventListener('change', async () =
     if (newEncoding !== currentMessageEncoding) {
         try {
             const messageContent = await getMaybeTextData(currentMessageEncoding, messageField)
-            writeMaybeTextData(newEncoding, messageField, messageContent)
+            await writeMaybeTextData(newEncoding, messageField, messageContent)
         } catch (e) {
             alert(e)
         }
@@ -111,12 +177,32 @@ async function verify() {
     const tag = await getData(currentTagEncoding, tagField)
     const key = await readKey(currentKeyEncoding)
     const ok = await window.crypto.subtle.verify(
-     'HMAC',
-     key,
-     tag,
-     message
-   )
-   verificationResult.textContent = ok ? 'OK' : 'NOT VALID'
+        'HMAC',
+        key,
+        tag,
+        message
+    )
+    verificationResult.textContent = ok ? 'OK' : 'NOT VALID'
+}
+
+async function updateMessage() {
+    switch (currentMessageEncoding) {
+        case 'dec':
+            messageField.value = toDec(data, dataLength)
+            break
+        case 'hex':
+            messageField.value = toHex(data, dataLength)
+            break
+        case 'base64':
+            messageField.value = await toBase64(data, dataLength)
+            break
+        case 'ascii':
+            messageField.value = toAscii(data, dataLength)
+            break
+        default:
+            throw new Error(`Invalid message encoding ${currentMessageEncoding}`)
+    }
+    updateBitmap(data)
 }
 
 keyField.value = ''
