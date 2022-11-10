@@ -32,6 +32,11 @@ const updateBitmap = makeBitmapUpdater(bitmap)
 const paint = makePaint(data, bitmap, 5, updateMessage)
 
 function setDataLengthAndPaint(e) {
+    if (currentMessageEncoding === 'ascii') {
+        alert('Please switch to a non-ASCII encoding for the message text field first')
+        return
+    }
+    tagField.value = ''
     updateDataLength(512)
     paint(e)
 }
@@ -96,8 +101,6 @@ async function generateKey() {
         ['sign', 'verify']
     )
     writeKey(currentKeyEncoding, key)
-    messageField.value = ''
-    tagField.value = ''
 }
 
 async function readKey(encoding: KeyEncoding): Promise<CryptoKey> {
