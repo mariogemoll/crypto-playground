@@ -10,12 +10,15 @@ import {
 const IV_LENGTH = 12
 
 const plaintextEncodingRadioButtons = getRadioButtons('plaintextencoding')
+const additionalDataEncodingRadioButtons = getRadioButtons('additionaldataencoding')
 const ciphertextEncodingRadioButtons = getRadioButtons('ciphertextencoding')
 const plaintext = getElement('textarea#plaintext')
+const additionalData = getElement('textarea#additionaldata')
 const ciphertext = getElement('textarea#ciphertext')
 
 type KeyEncoding = DataEncoding
 type PlaintextEncoding = MaybeTextEncoding
+type AdditionalDataEncoding = MaybeTextEncoding
 type CiphertextEncoding = DataEncoding
 
 const keyField = getElement('textarea#key') as HTMLTextAreaElement
@@ -23,6 +26,7 @@ const keyEncodingRadioButtons = getRadioButtons('keyencoding')
 
 const getKeyEncoding = getDataEncoding.bind(null, 'key', keyEncodingRadioButtons)
 const getPlaintextEncoding = getMaybeTextEncoding.bind(null, 'plaintext', plaintextEncodingRadioButtons)
+const getAdditionalDataEncoding = getMaybeTextEncoding.bind(null, 'additionaldata', additionalDataEncodingRadioButtons)
 const getCiphertextEncoding = getDataEncoding.bind(null, 'ciphertext', ciphertextEncodingRadioButtons)
 
 let plaintextData = new ArrayBuffer(2048)
@@ -104,8 +108,7 @@ plaintext.addEventListener('input', async function () {
     } catch (e) {
         alert(e)
     }
-}
-)
+})
 
 plaintextBitmap.addEventListener('click', setPlaintextDataLengthAndPaint)
 
@@ -138,6 +141,7 @@ async function writeKey(encoding: KeyEncoding, key: CryptoKey) {
 
 let currentKeyEncoding: KeyEncoding = getKeyEncoding()
 let currentPlaintextEncoding: PlaintextEncoding = getPlaintextEncoding()
+let currentAdditionalDataEncoding: AdditionalDataEncoding = getAdditionalDataEncoding()
 let currentCiphertextEncoding: CiphertextEncoding = getCiphertextEncoding()
 
 const generateKeyButton = getElement('button#buttongeneratekey')
@@ -193,16 +197,22 @@ ciphertextEncodingRadioButtons.forEach(x => x.addEventListener('change', async (
 generateKeyButton.addEventListener('click', generateKey)
 
 async function encrypt() {
-    const input = await getMaybeTextData(currentPlaintextEncoding, plaintext)
+    const plaintextBytes = await getMaybeTextData(currentPlaintextEncoding, plaintext)
+    const additionalDataBytes = await getMaybeTextData(currentAdditionalDataEncoding, additionalData)
     const key = await readKey(currentKeyEncoding)
     const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH))
+    console.log('key', key)
+    console.log('plaintext', plaintextBytes)
+    console.log('additionalData', additionalDataBytes)
+    console.log('iv', iv)
     const ciphertextData = await window.crypto.subtle.encrypt(
         {
             name: 'AES-GCM',
             iv: iv,
+            additionalData: additionalDataBytes
         },
         key,
-        input
+        plaintextBytes
     )
 
     const result = new ArrayBuffer(iv.byteLength + ciphertextData.byteLength)
@@ -213,15 +223,22 @@ async function encrypt() {
 }
 
 async function decrypt() {
-    const input = await getData(currentCiphertextEncoding, ciphertext)
-    const iv = input.slice(0, IV_LENGTH)
-    const ciphertextData = input.slice(IV_LENGTH)
+    const ciphertextBytes = await getData(currentCiphertextEncoding, ciphertext)
+    const additionalDataBytes = await getMaybeTextData(currentAdditionalDataEncoding, additionalData)
+    const iv = ciphertextBytes.slice(0, IV_LENGTH)
+    const ciphertextData = ciphertextBytes.slice(IV_LENGTH)
+    const key = await readKey(currentKeyEncoding)
+    console.log('key', key)
+    console.log('ciphertext', ciphertextData)
+    console.log('additionalData', additionalDataBytes)
+    console.log('iv', iv)
     const newPlaintextData = await window.crypto.subtle.decrypt(
         {
             name: 'AES-GCM',
             iv: iv,
+            additionalData: additionalDataBytes
         },
-        await readKey(currentKeyEncoding),
+        key,
         ciphertextData
     )
     updatePlaintextData(newPlaintextData)
@@ -250,5 +267,6 @@ getElement('button#decrypt').addEventListener('click', async function () {
 
 keyField.value = ''
 plaintext.value = ''
+additionalData.value = ''
 ciphertext.value = ''
 generateKey()

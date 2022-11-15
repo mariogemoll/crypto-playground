@@ -60,6 +60,29 @@
         </tr>
         <tr>
             <td colspan="2">
+                <h2>Additional data</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="additionaldata"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="additionaldataencodingdec" name="additionaldataencoding" value="dec" />
+                <label for="additionaldataencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="additionaldataencodinghex" name="additionaldataencoding" value="hex" />
+                <label for="additionaldataencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="additionaldataencodingbase64" name="additionaldataencoding" value="base64" />
+                <label for="additionaldataencodingbase64">Base64</label>
+                <br />
+                <input type="radio" id="additionaldataencodingascii" name="additionaldataencoding" value="ascii" checked />
+                <label for="additionaldataencodingascii">ASCII</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
                 <button id="encrypt">↓ Encrypt</button>
                 <button id="decrypt">↑ Decrypt</button>
             </td>
