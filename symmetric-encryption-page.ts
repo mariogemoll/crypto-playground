@@ -7,6 +7,8 @@ import {
     fromDec, toDec, fromHex, toHex, fromBase64, toBase64, fromAscii, toAscii
 } from './bytes.js'
 
+const IV_LENGTH = 12
+
 const plaintextEncodingRadioButtons = getRadioButtons('plaintextencoding')
 const ciphertextEncodingRadioButtons = getRadioButtons('ciphertextencoding')
 const plaintext = getElement('textarea#plaintext')
@@ -193,7 +195,7 @@ generateKeyButton.addEventListener('click', generateKey)
 async function encrypt() {
     const input = await getMaybeTextData(currentPlaintextEncoding, plaintext)
     const key = await readKey(currentKeyEncoding)
-    const iv = crypto.getRandomValues(new Uint8Array(16))
+    const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH))
     const ciphertextData = await window.crypto.subtle.encrypt(
         {
             name: 'AES-GCM',
@@ -212,8 +214,8 @@ async function encrypt() {
 
 async function decrypt() {
     const input = await getData(currentCiphertextEncoding, ciphertext)
-    const iv = input.slice(0, 16)
-    const ciphertextData = input.slice(16)
+    const iv = input.slice(0, IV_LENGTH)
+    const ciphertextData = input.slice(IV_LENGTH)
     const newPlaintextData = await window.crypto.subtle.decrypt(
         {
             name: 'AES-GCM',
