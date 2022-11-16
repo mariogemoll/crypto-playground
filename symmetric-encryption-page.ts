@@ -243,7 +243,7 @@ async function decrypt() {
     )
     updatePlaintextData(newPlaintextData)
     updatePlaintextDataLength(newPlaintextData.byteLength)
-    updatePlaintextFieldAndBitmap()
+    await updatePlaintextFieldAndBitmap()
 }
 
 
