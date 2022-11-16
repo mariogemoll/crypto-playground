@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Key exchange</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Key exchange</h1>
+    <table>
+        <tr>
+            <td colspan="2">Algorithm: ECDH</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding-top: 5px">
+                <button id="generatekeypair">Generate key pair</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Private key</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="privatekey"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="privatekeyencodingdec" name="privatekeyencoding" value="dec" />
+                <label for="privatekeyencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="privatekeyencodinghex" name="privatekeyencoding" value="hex" />
+                <label for="privatekeyencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="privatekeyencodingbase64" name="privatekeyencoding" value="base64" checked />
+                <label for="privatekeyencodingbase64">Base64</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Public key</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="publickey"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="publickeyencodingdec" name="publickeyencoding" value="dec" />
+                <label for="publickeyencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="publickeyencodinghex" name="publickeyencoding" value="hex" />
+                <label for="publickeyencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="publickeyencodingbase64" name="publickeyencoding" value="base64" checked />
+                <label for="publickeyencodingbase64">Base64</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Counterparty's public key</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="counterpartykey"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="counterpartykeyencodingdec" name="counterpartykeyencoding" value="dec" />
+                <label for="counterpartykeyencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="counterpartykeyencodinghex" name="counterpartykeyencoding" value="hex" />
+                <label for="counterpartykeyencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="counterpartykeyencodingbase64" name="counterpartykeyencoding" value="base64" checked />
+                <label for="counterpartykeyencodingbase64">Base64</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding-top: 5px">
+                <button id="derivekey">Derive key</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Key</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="key" readonly></textarea>
+            </td>
+            <td>
+                <input type="radio" id="keyencodingdec" name="keyencoding" value="dec" />
+                <label for="keyencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="keyencodinghex" name="keyencoding" value="hex" />
+                <label for="keyencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="keyencodingbase64" name="keyencoding" value="base64" checked />
+                <label for="keyencodingbase64">Base64</label>
+            </td>
+        </tr>
+    </table>
+    <script src="key-exchange-page.js" type="module"></script>
+</body>
+
+</html>

@@ -110,3 +110,22 @@ export async function writeMaybeTextData(encoding: MaybeTextEncoding,
             throw new Error(`Invalid encoding "${encoding}"`)
     }
 }
+
+export function wireUpBinaryDataField(field: HTMLTextAreaElement, name: string) {
+    const radioButtons = getRadioButtons(`${name}encoding`)
+    const getEncoding = getDataEncoding.bind(null, name, radioButtons)
+    let currentEncoding = getEncoding()
+    radioButtons.forEach(x => x.addEventListener('change', async () => {
+        const newEncoding = getEncoding()
+        if (newEncoding !== currentEncoding) {
+            try {
+                writeData(newEncoding, field, await getData(currentEncoding, field))
+            } catch (e) {
+                console.log(e)
+                alert(e)
+            }
+            currentEncoding = newEncoding
+        }
+    }))
+    return getEncoding
+}
