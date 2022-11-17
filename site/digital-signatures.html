@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Digital signatures</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Digital signatures</h1>
+    <table>
+        <tr>
+            <td colspan="2">Algorithm: ECDSA</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding-top: 5px">
+                <button id="generatekeypair">Generate key pair</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Private key</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="privatekey"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="privatekeyencodingdec" name="privatekeyencoding" value="dec" />
+                <label for="privatekeyencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="privatekeyencodinghex" name="privatekeyencoding" value="hex" />
+                <label for="privatekeyencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="privatekeyencodingbase64" name="privatekeyencoding" value="base64" checked />
+                <label for="privatekeyencodingbase64">Base64</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Public key</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="publickey"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="publickeyencodingdec" name="publickeyencoding" value="dec" />
+                <label for="publickeyencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="publickeyencodinghex" name="publickeyencoding" value="hex" />
+                <label for="publickeyencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="publickeyencodingbase64" name="publickeyencoding" value="base64" checked />
+                <label for="publickeyencodingbase64">Base64</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Message</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="message"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="messageencodingdec" name="messageencoding" value="dec" />
+                <label for="messageencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="messageencodinghex" name="messageencoding" value="hex" />
+                <label for="messageencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="messageencodingbase64" name="messageencoding" value="base64" />
+                <label for="messageencodingbase64">Base64</label>
+                <br />
+                <input type="radio" id="messageencodingascii" name="messageencoding" value="ascii" checked />
+                <label for="messageencodingascii">ASCII</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button id="sign">Sign</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Signature</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="signature"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="signatureencodingdec" name="signatureencoding" value="dec" />
+                <label for="signatureencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="signatureencodinghex" name="signatureencoding" value="hex" />
+                <label for="signatureencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="signatureencodingbase64" name="signatureencoding" value="base64" checked />
+                <label for="signatureencodingbase64">Base64</label>
+            </td>
+        </tr>
+    </table>
+    <script src="digital-signatures-page.js" type="module"></script>
+</body>
+
+</html>

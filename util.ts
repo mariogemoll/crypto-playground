@@ -92,7 +92,7 @@ export async function writeData(encoding: DataEncoding, el: HTMLInputElement | H
 }
 
 export async function writeMaybeTextData(encoding: MaybeTextEncoding,
-    el: HTMLInputElement | HTMLTextAreaElement, data: ArrayBuffer) {
+    el: HTMLInputElement | HTMLTextAreaElement, data: ArrayBuffer): Promise<void> {
     switch (encoding) {
         case 'dec':
             el.value = toDec(data)
@@ -111,15 +111,67 @@ export async function writeMaybeTextData(encoding: MaybeTextEncoding,
     }
 }
 
-export function wireUpBinaryDataField(field: HTMLTextAreaElement, name: string) {
-    const radioButtons = getRadioButtons(`${name}encoding`)
-    const getEncoding = getDataEncoding.bind(null, name, radioButtons)
+// export function wireUpBinaryDataField(field: HTMLTextAreaElement, name: string) {
+//     const radioButtons = getRadioButtons(`${name}encoding`)
+//     const getEncoding: () => DataEncoding = getDataEncoding.bind(null, name, radioButtons)
+//     let currentEncoding = getEncoding()
+//     radioButtons.forEach(x => x.addEventListener('change', async () => {
+//         const newEncoding = getEncoding()
+//         if (newEncoding !== currentEncoding) {
+//             try {
+//                 writeData(newEncoding, field, await getData(currentEncoding, field))
+//             } catch (e) {
+//                 console.log(e)
+//                 alert(e)
+//             }
+//             currentEncoding = newEncoding
+//         }
+//     }))
+//     return getEncoding
+// }
+
+type DataGetter = () => Promise<ArrayBuffer>
+type DataWriter = (data: ArrayBuffer) => Promise<void>
+type EncodingGetter = () => MaybeTextEncoding
+
+type WireUpReturnValue = [ HTMLTextAreaElement, DataGetter, DataWriter, EncodingGetter ]
+
+type WireUpFnc = (label: string) => WireUpReturnValue
+
+// export function wireUpMaybeTextField(field: HTMLTextAreaElement, name: string): [ DataGetter, DataWriter, EncodingGetter ] {
+//     const radioButtons = getRadioButtons(`${name}encoding`)
+//     const getEncoding: () => DataEncoding = getMaybeTextEncoding.bind(null, name, radioButtons)
+//     const getData: () => Promise<ArrayBuffer> = getMaybeTextData.bind(null, getEncoding(), field)
+//     const writeData: (data: ArrayBuffer) => Promise<void> = writeMaybeTextData.bind(null, getEncoding(), field)
+//     let currentEncoding = getEncoding()
+//     radioButtons.forEach(x => x.addEventListener('change', async () => {
+//         const newEncoding = getEncoding()
+//         if (newEncoding !== currentEncoding) {
+//             try {
+//                 await writeData(await getData())
+//             } catch (e) {
+//                 console.log(e)
+//                 alert(e)
+//             }
+//             currentEncoding = newEncoding
+//         }
+//     }))
+//     return [ getData, writeData, getEncoding ]
+
+// }
+
+
+function wireUp(getEncodingFnc, getDataFnc, writeDataFnc, label: string): WireUpReturnValue {
+    const field: HTMLTextAreaElement = getElement(`textarea#${label}`)
+    const radioButtons = getRadioButtons(`${label}encoding`)
+   const getEncoding: () => DataEncoding = getEncodingFnc.bind(null, label, radioButtons)
     let currentEncoding = getEncoding()
     radioButtons.forEach(x => x.addEventListener('change', async () => {
         const newEncoding = getEncoding()
         if (newEncoding !== currentEncoding) {
             try {
-                writeData(newEncoding, field, await getData(currentEncoding, field))
+                const newData = await getDataFnc(currentEncoding, field)
+                await writeDataFnc(newEncoding, field, newData)
             } catch (e) {
                 console.log(e)
                 alert(e)
@@ -127,5 +179,10 @@ export function wireUpBinaryDataField(field: HTMLTextAreaElement, name: string) 
             currentEncoding = newEncoding
         }
     }))
-    return getEncoding
+    const getData = () => getDataFnc(getEncoding(), field)
+    const writeData = (data: ArrayBuffer) => writeDataFnc(getEncoding(), field, data)
+    return [ field, getData, writeData, getEncoding ]
 }
+
+export const wireUpMaybeTextField: WireUpFnc = wireUp.bind(null, getMaybeTextEncoding, getMaybeTextData, writeMaybeTextData)
+export const wireUpBinaryDataField: WireUpFnc = wireUp.bind(null, getDataEncoding, getData, writeData)
