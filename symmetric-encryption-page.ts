@@ -46,10 +46,10 @@ function updatePlaintextDataLength(newLength: number) {
     }
 }
 function updatePlaintextData(newData: ArrayBuffer) {
-        const dataUints = new Uint8Array(plaintextData);
-        dataUints.set(new Uint8Array(newData));
+        const dataUints = new Uint8Array(plaintextData)
+        dataUints.set(new Uint8Array(newData))
         for (let i = newData.byteLength; i < plaintextData.byteLength; i++) {
-            dataUints[i] = 0;
+            dataUints[i] = 0
         }
     }
 

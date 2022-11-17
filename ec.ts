@@ -1,16 +1,16 @@
-import { fromBase64, toBase64 } from "./bytes.js";
-import { fromBase64Url, toBase64Url } from "./base64url.js";
+import { fromBase64, toBase64 } from './bytes.js'
+import { fromBase64Url, toBase64Url } from './base64url.js'
 
 async function exportPrivateKey(privateKey: CryptoKey): Promise<ArrayBuffer> {
-    const jwt = await crypto.subtle.exportKey("jwk", privateKey)
+    const jwt = await crypto.subtle.exportKey('jwk', privateKey)
     if (jwt.d === undefined) {
-        throw new Error("Not a private key")
+        throw new Error('Not a private key')
     }
     return fromBase64(fromBase64Url(jwt.d))
 }
 
 async function exportPublicKey(publicKey: CryptoKey): Promise<ArrayBuffer> {
-    const exported = await crypto.subtle.exportKey("raw", publicKey)
+    const exported = await crypto.subtle.exportKey('raw', publicKey)
     return exported.slice(1)
 }
 
@@ -19,7 +19,7 @@ export async function importPublicKey(params: EcKeyImportParams, publicKey: Arra
     const view = new Uint8Array(input)
     view[0] = 0x04
     view.set(new Uint8Array(publicKey), 1)
-    return crypto.subtle.importKey("raw", input, params, true, [])
+    return crypto.subtle.importKey('raw', input, params, true, [])
 }
 
 export async function importPrivateKey(
@@ -31,8 +31,8 @@ export async function importPrivateKey(
         toBase64(privateKey)
     ])
     const [ x, y, d ] = vals.map(toBase64Url)
-    const jwt = { kty: "EC", crv: "P-256", x, y, d, ext: true }
-    return crypto.subtle.importKey("jwk", jwt, params, true, usages)
+    const jwt = { kty: 'EC', crv: 'P-256', x, y, d, ext: true }
+    return crypto.subtle.importKey('jwk', jwt, params, true, usages)
 }
 
 export async function generateKeyPair(params: EcKeyGenParams, keyUsages: KeyUsage[]): Promise<[ArrayBuffer, ArrayBuffer]> {

@@ -1,6 +1,6 @@
-import { positionalNumberSystem as pns, PNSFunctions } from "./positional-number-system.js"
-import { getElement } from "./util.js"
-import { makeBitmapUpdater, makePaint } from "./bitmap.js"
+import { positionalNumberSystem as pns, PNSFunctions } from './positional-number-system.js'
+import { getElement } from './util.js'
+import { makeBitmapUpdater, makePaint } from './bitmap.js'
 
 const nBase32 = pns(32n, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567')
 const nBase58 = pns(58n, '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz')
@@ -45,7 +45,7 @@ const updateBitmap = makeBitmapUpdater(bitmap)
 
 base2Field.addEventListener('input', function (e) {
     let newValStr = base2Field.value.trim()
-    if (newValStr.indexOf("0b") === 0) {
+    if (newValStr.indexOf('0b') === 0) {
         newValStr = newValStr.slice(2)
     }
     if (newValStr.length > 256) {
@@ -78,7 +78,7 @@ base10Field.addEventListener('input', function (e) {
 
 base16Field.addEventListener('input', function (e) {
     let newValStr = base16Field.value.trim()
-    if (newValStr.indexOf("0x") === 0) {
+    if (newValStr.indexOf('0x') === 0) {
         newValStr = newValStr.slice(2)
     }
     if (newValStr.length % 2 === 1) {
@@ -172,7 +172,7 @@ function updateWithNumber(newVal: bigint) {
     for (let i = 0; i < 32; i++) {
         let byte = 0
         for (let j = 0; j < 8; j++) {
-            if (str[i * 8 + j] === "1") {
+            if (str[i * 8 + j] === '1') {
                 const num = 1 << (7 - j)
                 byte |= num
             }

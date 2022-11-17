@@ -102,7 +102,7 @@ export function toHex(buf: ArrayBuffer, len?: number): string {
 }
 
 export async function fromBase64(str: string): Promise<ArrayBuffer> {
-    const url = "data:application/octet-stream;base64," + str
+    const url = 'data:application/octet-stream;base64,' + str
     try {
         const res = await fetch(url)
         const blob = await res.blob()
@@ -130,7 +130,7 @@ export function toBase64(buf: ArrayBuffer, len?: number): Promise<string> {
                 return
             }
             const result = event.target.result as string
-            // Strip off the "data:application/octet-stream;base64," prefix
+            // Strip off the 'data:application/octet-stream;base64,' prefix
             resolve(result.slice(37))
         }
         reader.onerror = reject
