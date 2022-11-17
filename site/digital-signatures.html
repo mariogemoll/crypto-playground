@@ -4,14 +4,14 @@
 <head>
     <title>Digital signatures</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="digital-signatures.css">
 </head>
 
 <body>
     <h1>Digital signatures</h1>
+    <p>Algorithm: ECDSA</p>
+    <h2>Sign</h2>
     <table>
-        <tr>
-            <td colspan="2">Algorithm: ECDSA</td>
-        </tr>
         <tr>
             <td colspan="2" style="padding-top: 5px">
                 <button id="generatekeypair">Generate key pair</button>
@@ -19,7 +19,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <h2>Private key</h2>
+                <h3>Private key</h3>
             </td>
         </tr>
         <tr>
@@ -39,7 +39,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <h2>Public key</h2>
+                <h3>Public key</h3>
             </td>
         </tr>
         <tr>
@@ -59,7 +59,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <h2>Message</h2>
+                <h3>Message</h3>
             </td>
         </tr>
         <tr>
@@ -87,7 +87,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <h2>Signature</h2>
+                <h3>Signature</h3>
             </td>
         </tr>
         <tr>
@@ -103,6 +103,79 @@
                 <br />
                 <input type="radio" id="signatureencodingbase64" name="signatureencoding" value="base64" checked />
                 <label for="signatureencodingbase64">Base64</label>
+            </td>
+        </tr>
+    </table>
+
+    <h2>Verify</h2>
+    <table>
+        <tr>
+            <td colspan="2">
+                <h3>Counterparty public key</h3>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="counterpartykey"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="counterpartykeyencodingdec" name="counterpartykeyencoding" value="dec" />
+                <label for="counterpartykeyencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="counterpartykeyencodinghex" name="counterpartykeyencoding" value="hex" />
+                <label for="counterpartykeyencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="counterpartykeyencodingbase64" name="counterpartykeyencoding" value="base64" checked />
+                <label for="counterpartykeyencodingbase64">Base64</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h3>Received message</h3>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="receivedmessage"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="receivedmessageencodingdec" name="receivedmessageencoding" value="dec" />
+                <label for="receivedmessageencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="receivedmessageencodinghex" name="receivedmessageencoding" value="hex" />
+                <label for="receivedmessageencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="receivedmessageencodingbase64" name="receivedmessageencoding" value="base64" />
+                <label for="receivedmessageencodingbase64">Base64</label>
+                <br />
+                <input type="radio" id="receivedmessageencodingascii" name="receivedmessageencoding" value="ascii" checked />
+                <label for="receivedmessageencodingascii">ASCII</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h3>Signature</h3>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="receivedsignature"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="receivedsignatureencodingdec" name="receivedsignatureencoding" value="dec" />
+                <label for="receivedsignatureencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="receivedsignatureencodinghex" name="receivedsignatureencoding" value="hex" />
+                <label for="receivedsignatureencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="receivedsignatureencodingbase64" name="receivedsignatureencoding" value="base64" checked />
+                <label for="receivedsignatureencodingbase64">Base64</label>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <button id="verify">Verify</button>
             </td>
         </tr>
     </table>

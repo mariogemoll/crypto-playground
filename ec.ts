@@ -14,12 +14,12 @@ async function exportPublicKey(publicKey: CryptoKey): Promise<ArrayBuffer> {
     return exported.slice(1)
 }
 
-export async function importPublicKey(params: EcKeyImportParams, publicKey: ArrayBuffer): Promise<CryptoKey> {
+export async function importPublicKey(params: EcKeyImportParams, usages: KeyUsage[], publicKey: ArrayBuffer): Promise<CryptoKey> {
     const input = new ArrayBuffer(65)
     const view = new Uint8Array(input)
     view[0] = 0x04
     view.set(new Uint8Array(publicKey), 1)
-    return crypto.subtle.importKey('raw', input, params, true, [])
+    return crypto.subtle.importKey('raw', input, params, true, usages)
 }
 
 export async function importPrivateKey(

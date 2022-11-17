@@ -7,7 +7,7 @@ body {
     padding: 10px;
 }
 
-body, h1, h2, p, td, input, button {
+body, h1, h2, h3, p, td, input, button {
     font-family: epilogue;
 }
 
@@ -29,7 +29,7 @@ h1 {
     margin: 20px 0px;
 }
 
-h2 {
+h2, h3 {
     font-size: 16px;
     line-height: 24px;
     padding: 0;

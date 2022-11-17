@@ -8,7 +8,7 @@ export async function deriveAesGcmKey(
     d: ArrayBuffer, xy: ArrayBuffer, counterpartyXy: ArrayBuffer
 ): Promise<ArrayBuffer> {
     const privateKey = await importPrivateKey(params, [ 'deriveKey'], d, xy)
-    const counterpartyPublicKey = await importPublicKey(params, counterpartyXy)
+    const counterpartyPublicKey = await importPublicKey(params, [], counterpartyXy)
     const key = await crypto.subtle.deriveKey(
         {
             name: 'ECDH',
