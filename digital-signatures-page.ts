@@ -1,4 +1,4 @@
-import { getElement, getData, writeData, wireUpBinaryDataField, wireUpMaybeTextField } from './util.js'
+import { getElement, wireUpBinaryDataField, wireUpMaybeTextField } from './util.js'
 import { generateKeyPair, sign, verify } from './ecdsa.js'
 
 const generateKeyPairButton = getElement('button#generatekeypair')
