@@ -18,7 +18,7 @@ async function generateNewKeyPair() {
     await Promise.all([ writePrivateKey(privateKey), writePublicKey(publicKey) ])
 }
 
-generateKeyPairButton.addEventListener('click', generateKeyPair)
+generateKeyPairButton.addEventListener('click', generateNewKeyPair)
 
 signButton.addEventListener('click', async () => {
     try {
