@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Asymmetric encryption</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Asymmetric encryption</h1>
+    <p>Algorithm: RSA-OAEP</p>
+    <h2 class="sectionheader">Key generation</h2>
+    <table>
+        <tr>
+            <td colspan="2" style="padding-top: 5px">
+                <button id="generatekeypair">Generate key pair</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h3>Private key</h3>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="privatekey"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="privatekeyencodingdec" name="privatekeyencoding" value="dec" />
+                <label for="privatekeyencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="privatekeyencodinghex" name="privatekeyencoding" value="hex" />
+                <label for="privatekeyencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="privatekeyencodingbase64" name="privatekeyencoding" value="base64" checked />
+                <label for="privatekeyencodingbase64">Base64</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h3>Public key</h3>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="publickey"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="publickeyencodingdec" name="publickeyencoding" value="dec" />
+                <label for="publickeyencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="publickeyencodinghex" name="publickeyencoding" value="hex" />
+                <label for="publickeyencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="publickeyencodingbase64" name="publickeyencoding" value="base64" checked />
+                <label for="publickeyencodingbase64">Base64</label>
+            </td>
+        </tr>
+    </table>
+
+    <h2 class="sectionheader">Encrypt</h2>
+    <table>
+        <tr>
+            <td colspan="2">
+                <h2>Plaintext</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="encryptplaintext"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="encryptplaintextencodingdec" name="encryptplaintextencoding" value="dec" />
+                <label for="encryptplaintextencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="encryptplaintextencodinghex" name="encryptplaintextencoding" value="hex" />
+                <label for="encryptplaintextencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="encryptplaintextencodingbase64" name="encryptplaintextencoding" value="base64" />
+                <label for="encryptplaintextencodingbase64">Base64</label>
+                <br />
+                <input type="radio" id="encryptplaintextencodingascii" name="encryptplaintextencoding" value="ascii" checked />
+                <label for="encryptplaintextencodingascii">ASCII</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h3>Counterparty public key</h3>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="counterpartykey"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="counterpartykeyencodingdec" name="counterpartykeyencoding" value="dec" />
+                <label for="counterpartykeyencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="counterpartykeyencodinghex" name="counterpartykeyencoding" value="hex" />
+                <label for="counterpartykeyencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="counterpartykeyencodingbase64" name="counterpartykeyencoding" value="base64" checked />
+                <label for="counterpartykeyencodingbase64">Base64</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button id="encrypt">Encrypt</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Ciphertext</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="encryptciphertext"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="encryptciphertextencodingdec" name="encryptciphertextencoding" value="dec" />
+                <label for="encryptciphertextencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="encryptciphertextencodinghex" name="encryptciphertextencoding" value="hex" />
+                <label for="encryptciphertextencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="encryptciphertextencodingbase64" name="encryptciphertextencoding" value="base64" checked />
+                <label for="encryptciphertextencodingbase64">Base64</label>
+            </td>
+        </tr>
+    </table>
+
+    <h2 class="sectionheader">Decrypt</h2>
+    <table>
+        <tr>
+            <td colspan="2">
+                <h2>Ciphertext</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="decryptciphertext"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="decryptciphertextencodingdec" name="decryptciphertextencoding" value="dec" />
+                <label for="decryptciphertextencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="decryptciphertextencodinghex" name="decryptciphertextencoding" value="hex" />
+                <label for="decryptciphertextencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="decryptciphertextencodingbase64" name="decryptciphertextencoding" value="base64" checked />
+                <label for="decryptciphertextencodingbase64">Base64</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button id="decrypt">Decrypt</button>
+                (using private key from above)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>Plaintext</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="decryptplaintext"></textarea>
+            </td>
+            <td>
+                <input type="radio" id="decryptplaintextencodingdec" name="decryptplaintextencoding" value="dec" />
+                <label for="decryptplaintextencodingdec">Decimal (comma-separated)</label>
+                <br />
+                <input type="radio" id="decryptplaintextencodinghex" name="decryptplaintextencoding" value="hex" />
+                <label for="decryptplaintextencodinghex">Hex</label>
+                <br />
+                <input type="radio" id="decryptplaintextencodingbase64" name="decryptplaintextencoding" value="base64" />
+                <label for="decryptplaintextencodingbase64">Base64</label>
+                <br />
+                <input type="radio" id="decryptplaintextencodingascii" name="decryptplaintextencoding" value="ascii" checked />
+                <label for="decryptplaintextencodingascii">ASCII</label>
+            </td>
+        </tr>
+    </table>
+
+    <script src="asymmetric-encryption-page.js" type="module"></script>
+</body>
+
+</html>
