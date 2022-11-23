@@ -4,13 +4,12 @@
 <head>
     <title>Digital signatures</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="digital-signatures.css">
 </head>
 
 <body>
     <h1>Digital signatures</h1>
     <p>Algorithm: ECDSA</p>
-    <h2>Sign</h2>
+    <h2 class="sectionheader">Key generation</h2>
     <table>
         <tr>
             <td colspan="2" style="padding-top: 5px">
@@ -57,6 +56,9 @@
                 <label for="publickeyencodingbase64">Base64</label>
             </td>
         </tr>
+    </table>
+    <h2 class="sectionheader">Sign</h2>
+    <table>
         <tr>
             <td colspan="2">
                 <h3>Message</h3>
@@ -78,6 +80,11 @@
                 <br />
                 <input type="radio" id="messageencodingascii" name="messageencoding" value="ascii" checked />
                 <label for="messageencodingascii">ASCII</label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h3>(using private key from above)</h3>
             </td>
         </tr>
         <tr>
@@ -107,7 +114,7 @@
         </tr>
     </table>
 
-    <h2>Verify</h2>
+    <h2 class="sectionheader">Verify</h2>
     <table>
         <tr>
             <td colspan="2">

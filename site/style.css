@@ -58,3 +58,10 @@ textarea, input[type=text] {
 canvas {
     image-rendering: pixelated;
 }
+
+h2.sectionheader {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid grey;
+    text-decoration: underline;
+}
